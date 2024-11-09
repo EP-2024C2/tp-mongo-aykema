@@ -1,3 +1,7 @@
+const Producto = require('../models/producto')
+const mongoose = require('mongoose')
+const { id } = require('../schemas/componentes.schema')
+
 const middleware = {}
 
 const requestTime = (req, _ , next) => {
@@ -5,19 +9,43 @@ const requestTime = (req, _ , next) => {
     next()
 }
 
-const validateId = (Model) => {
-    return async (req, res, next) => {
-      const id = req.params.id
-      const instance = await Model.findByPk(id)
-  
-      if (!instance) {
-        return res.status(404).json({ mensaje: `${Model.name} con id ${id} no encontrado` })
-      }
-  
-      next()
+const validateId = (Model, validateComponent = false) => {
+  return async (req, res, next) => {
+    const _id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).send('ID no válido')
     }
+
+    const model = await Model.findById(_id);
+
+    if (!model) {
+      return res.status(404).send('Producto no encontrado');
+    }
+
+    next();
+  }
 }
 
+const validateComponentId = (Model) => {
+  return async (req, res, next) => {
+    const { id, componenteId } = req.params;
+    console.log({ id, componenteId })
+    if (!mongoose.Types.ObjectId.isValid(componenteId)) {
+      return res.status(400).send('ID no válido');
+    }
+
+    const producto = await Model.findById(id);
+    const componente = producto.componentes.id(componenteId);
+
+    if (!componente) {
+      return res.status(404).send('Componente no encontrado');
+    }
+
+    next();
+  }
+}
+/* validacion del tp anterior
 const validateAssociationsById = (Model, throughModel) => {
   return async (req, res, next) => {
     const id = req.params.id;
@@ -39,5 +67,5 @@ const validateAssociationsById = (Model, throughModel) => {
     next()
   }
 }
-
-module.exports = { requestTime, validateId, validateAssociationsById}
+*/
+module.exports = { requestTime, validateId, validateComponentId}
