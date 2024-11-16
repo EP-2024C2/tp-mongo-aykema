@@ -1,5 +1,6 @@
-const mongoose = require("../db/mongo.db").mongoose;
-const { Schema } = require("mongoose");
+const mongoose = require("../db/mongo.db").mongoose
+const { Schema } = require("mongoose")
+const fabricante = require("./fabricante")
 
 const productoSchema = new mongoose.Schema({
     nombre: {
@@ -38,7 +39,17 @@ const productoSchema = new mongoose.Schema({
             minlength: [3, 'El campo descripcion del componente debe tener al menos 3 caracteres.'],
             maxlength: [255, 'El campo descripcion del componente no puede exceder los 255 caracteres.']
         }
+    }],
+    fabricantes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Fabricante',
     }]
-});
+})
 
-module.exports = mongoose.model("Producto", productoSchema);
+productoSchema.set('toJSON', {
+    transform: (_, ret) => {
+        delete ret.__v
+    }
+})
+
+module.exports = mongoose.model("Producto", productoSchema)

@@ -1,4 +1,5 @@
 const Producto = require("../models/producto")
+const Fabricante = require("../models/fabricante")
 
 const getAllProductos = async (req, res) => {
     const productos = await Producto.find()
@@ -60,4 +61,45 @@ const updateComponenteFromProducto = async (req, res) => {
     res.status(200).json(producto)
 }
 
-module.exports = { getAllProductos, getProductoById, createProducto, deleteProductoById, updateProductoById, getProductoYSusComponentes, addComponenteToProducto, getComponenteFromProducto, updateComponenteFromProducto }
+const deleteComponenteFromProducto = async (req, res) => { 
+    const _id = req.params.id;
+    const _idComponente = req.params.componenteId
+    const producto = await Producto.findByIdAndUpdate(
+        _id,
+        { $pull: { componentes: { _id: _idComponente } } },
+        { new: true }
+    )
+    res.status(200).json(producto)
+}
+
+const getProductoYSusFabricantes = async (req, res) => {
+    const _id = req.params.id
+    const producto = await Producto.findById(_id).populate('fabricantes')
+    res.status(200).json(producto.fabricantes);
+}
+
+const addFabricanteToProducto = async (req, res) => {
+    const _id = req.params.id
+    const fabricanteBody = req.body
+    const producto = await Producto.findById(_id)
+
+    let fabricante = await Fabricante.findOne({ nombre: fabricanteBody.nombre });
+
+    if (!fabricante) {
+        fabricante = await Fabricante.create(fabricanteBody)
+    }
+
+    if (!producto.fabricantes.includes(fabricante._id)) {
+        producto.fabricantes.push(fabricante._id)
+        await producto.save()
+    }
+
+    if (!fabricante.productos.includes(producto._id)) {
+        fabricante.productos.push(producto._id)
+        await fabricante.save()
+    }
+
+    res.status(200).json(producto)
+}
+
+module.exports = { getAllProductos, getProductoById, createProducto, deleteProductoById, updateProductoById, getProductoYSusComponentes, addComponenteToProducto, getComponenteFromProducto, updateComponenteFromProducto, deleteComponenteFromProducto, getProductoYSusFabricantes, addFabricanteToProducto }

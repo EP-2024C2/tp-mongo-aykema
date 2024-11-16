@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3001
 app.use(genericMiddleware.requestTime)
 app.use(express.json())
 app.use(routes.fabricantesRoute)
-app.use(routes.componentesRoute)
 app.use(routes.productosRoute)
 
 app.listen(PORT, async ()=>{
