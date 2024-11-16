@@ -1,6 +1,7 @@
-require('dotenv').config();
-const express = require("express");
-const dbCon = require("./db/mongo.db").connectToDatabase;
+require('dotenv').config()
+const express = require("express")
+const dbCon = require("./db/mongo.db").connectToDatabase
+const redisClient = require("./db/redis")
 const app = express()
 const routes = require('./routes')
 const { genericMiddleware } = require('./middlewares')
@@ -13,6 +14,7 @@ app.use(routes.productosRoute)
 
 app.listen(PORT, async ()=>{
     await dbCon()
+    await redisClient.connect()
     console.log(`Aplicacion iniciada en el puerto ${PORT}`)
 }
 

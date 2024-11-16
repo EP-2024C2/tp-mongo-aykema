@@ -18,8 +18,8 @@ const createFabricante = async (req, res) => {
 
 const deleteFabricanteById = async (req, res) => {
     const _id = req.params.id;
-    const result = await Fabricante.deleteOne({ _id });
-    res.status(200).json({ mensaje: `Filas afectadas: ${result.deletedCount}`});
+    const result = await Fabricante.deleteOne({ _id })
+    res.status(200).json({ mensaje: `Filas afectadas: ${result.deletedCount}`})
 }
 
 const updateFabricanteById = async (req, res) => {

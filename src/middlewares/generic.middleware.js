@@ -46,14 +46,14 @@ const validateAssociationsById = (Model, throughModel) => {
   return async (req, res, next) => {
     const id = req.params.id;
 
-    const instance = await Model.findById(id).populate(throughModel.modelName.toLowerCase() + 's');
+    const instance = await Model.findById(id).populate(throughModel.modelName.toLowerCase() + 's')
 
-    const associations = instance[throughModel.modelName.toLowerCase() + 's'];
+    const associations = instance[throughModel.modelName.toLowerCase() + 's']
     if (associations.length > 0) {
-      return res.status(500).json({ mensaje: `No se puede eliminar el ${Model.modelName} porque tiene registros asociados en ${throughModel.modelName}.` });
+      return res.status(500).json({ mensaje: `No se puede eliminar el ${Model.modelName} porque tiene registros asociados en ${throughModel.modelName}.` })
     }
 
-    next();
+    next()
   }
 }
 
