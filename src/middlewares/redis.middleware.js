@@ -1,7 +1,5 @@
-// middlewares/redis.middleware.js
 const redisClient = require('../db/redis')
 
-// Middleware para verificar cache
 const checkCache = (collection) => (req, res, next) => {
     const id = req.params.id ?? -1
     const key = `${collection}:${id}`
@@ -14,18 +12,16 @@ const checkCache = (collection) => (req, res, next) => {
     }).catch(() => next())
 }
 
-// Middleware para eliminar cache
 const deleteCache = (collection) => (req, res, next) => {
     const id = req.params.id ?? -1
 
-    // Si hay un ID específico, eliminar todas las keys que coincidan con el patrón
     if (id !== -1) {
         redisClient.keys(`${collection}:${id}:*`).then(keys => {
             if (keys.length > 0) {
                 redisClient.del(keys)
             }
         })
-        // También eliminar la key específica
+        
         redisClient.del(`${collection}:${id}`)
     }
     
