@@ -34,22 +34,24 @@ Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de 
 
 - **nodemon**: Herramienta para reiniciar el servidor automáticamente durante el desarrollo.
 
-## Instalación
+## Instalación y uso
 
 1. **Clonar el repositorio**:
 
    ```bash
     git clone https://github.com/EP-2024C2/tp-mongo-aykema.git
-    cd tp-mongo-aykema
     ```
 
+   ```bash
+    cd tp-mongo-aykema
+    ```
 2. **Instalar las dependencias**:
 
    ```bash
    npm i
     ```
 
-3. **Configurar y ejecutar con Docker**:
+3. **Configurar y ejecutar con Docker (Recomendado)**:
 
 - Asegúrate de tener Docker y Docker Compose instalados en tu sistema.
 
@@ -64,6 +66,7 @@ Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de 
     - Mongo Express (interfaz web) en el puerto 8081
     - Redis en el puerto 6379
     - RedisInsight (interfaz web) en el puerto 5540
+    - Nuestra App node.js en el puerto 3000
 
 4. **Verificar que los contenedores estén corriendo**:
 
@@ -75,6 +78,7 @@ Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de 
 
     - Mongo Express: http://localhost:8081
     - RedisInsight: http://localhost:5540
+    - App: http://localhost:3000
 
     Para detener los contenedores:
 
@@ -82,13 +86,10 @@ Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de 
     docker compose down
     ```
 
-Nota: Las credenciales y configuraciones se encuentran en el archivo `.env` y `docker-compose.yml`.
 
-## Uso
+### Desarrollo local (alternativo)
 
-### Desarrollo
-
-Para iniciar la aplicación en modo desarrollo con **Nodemon**, ejecuta:
+Para iniciar la aplicación sin docker en modo desarrollo con **Nodemon**, ejecuta:
 
 ```bash
 npm run dev
@@ -101,7 +102,19 @@ Para iniciar la aplicación en producción, ejecuta:
 ```bash
 npm start
 ```
+
+
 La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
+
+> 📝 **NOTA**: Las credenciales y configuraciones se encuentran en el archivo `.env` y `docker-compose.yml`.
+
+> ### ⚠️ IMPORTANTE
+> El desarrollo local requiere:
+> - MongoDB corriendo en puerto 27017
+> - Redis corriendo en puerto 6379
+> - Variables de entorno configuradas en `.env`
+>
+> **Se recomienda usar Docker** para evitar problemas de configuración.
 
 ## Rutas
 

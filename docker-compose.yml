@@ -10,6 +10,8 @@ services:
       - 27017:27017
     volumes:
       - ./mongo_data:/data/db
+    networks:
+      - redis-net
 
   mongo-express:
     image: mongo-express
@@ -20,6 +22,10 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: web1234
       ME_CONFIG_MONGODB_URL: mongodb://admin:admin1234@mongodb:27017/
       ME_CONFIG_BASICAUTH: "false"
+    networks:
+      - redis-net
+    depends_on:
+      - mongodb
 
   redis:
     image: redis:latest
@@ -38,9 +44,28 @@ services:
       - 5540:5540
     networks:
       - redis-net
+    depends_on:
+      - redis
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGO_URL=mongodb://admin:admin1234@mongodb:27017/productos?authSource=admin
+      - REDIS_URL=redis://redis:6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    networks:
+      - redis-net
+    depends_on:
+      - mongodb
+      - redis
 
 volumes:
   redis-data:
+  mongo_data:
 
 networks:
   redis-net:
+    driver: bridge

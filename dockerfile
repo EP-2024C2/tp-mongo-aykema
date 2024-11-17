@@ -20,16 +20,7 @@ COPY . .
 CMD ["node", "./src/app.js"]
 
 #para buildear la imagen: (app-image es el nombre de la imagen, 1.0.0 es la version, el punto final indica que el dockerfile esta en el directorio actual)
-# docker build -t app-image:1.0.0 .
+# docker build -t tp-mongo-aykema-image:1.0.0 .
 
 # para correr la imagen: (-p indica el puerto, 4000 es el puerto del host, 3000 es el puerto del contenedor, -d indica que se corra en segundo plano)
-# docker run -p 4000:3000 -d app-image:1.0.0
-
-# para correr la imagen con una variable de entorno:
-# docker run -d -p 4000:3005 -e PORT=3005 app-image:1.0.0
-
-# para entrar al contenedor:
-# docker exec -it ab3a34c33276 (container id) sh
-
-# para ver los logs del contenedor:
-# docker logs 184db21b0fad (container id)
+# docker run -p 4000:3000 -d tp-mongo-aykema-image:1.0.0
