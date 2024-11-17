@@ -1,45 +1,46 @@
-# TP-NtoM - Grupo Aykema
+# TP-Mongo - Grupo Aykema
 
-Repositorio del trabajo práctico 1, creado por el **Grupo Aykema**.
+Repositorio del trabajo práctico 2, creado por el **Grupo Aykema**.
 
 ## Descripción
 
-Este proyecto consiste en un API REST construida con Node.js, Express y Sequelize que implementa asociaciones de tipo "muchos a muchos" (M:N). Se utiliza **PostgreSQL** con Docker como base de datos por defecto, pero también se puede configurar para usar **SQLite** sin docker. 
+Este proyecto implementa una API REST utilizando Node.js y Express, con dos tipos de asociaciones:
+- Documentos embebidos para la relación Productos-Componentes
+- Referencias para la relación Productos-Fabricantes
+
+Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de caché, ambos containerizados con **Docker**.
 
 ## Estructura del Proyecto
 
-- **src/index.js**: Punto de entrada de la aplicación.
-- **/models**: Modelos Sequelize que representan las tablas de la base de datos.
+- **src/app.js**: Punto de entrada de la aplicación.
+- **/models**: Modelos Mongoose que definen la estructura de los documentos MongoDB.
 - **/routes**: Rutas para interactuar con los recursos.
 - **/controllers**: Lógica para manejar las solicitudes y respuestas de las rutas.
-- **/config**: Configuraciones de la aplicación.
-- **/middlewares**: Contiene los middlewares personalizados.
+- **/db**: Contiene la configuración de conexión a MongoDB y Redis.
+- **/middlewares**: Contiene los middlewares personalizados y manejo de caché con Redis.
 - **/schemas**: Define los esquemas de validación de datos utilizando Joi.
 
 ## Dependencias
 
 ### Principales:
 
-- **express**: Framework para crear la API.
-- **sequelize**: ORM para manejar las asociaciones y consultas de la base de datos.
-- **sqlite3**: Base de datos por defecto para el proyecto.
-- **pg**: Driver para PostgreSQL.
-- **pg-hstore**: Utilidad para serializar/deserializar datos JSON en PostgreSQL.
-- **joi**: Dependencia para la validación de datos.
+- **express**: Framework para crear la API REST.
+- **mongoose**: ODM para MongoDB que maneja el modelado y consultas a la base de datos.
+- **joi**: Biblioteca para validación de datos y esquemas.
+- **redis**: Cliente de Redis para manejo de caché.
 - **dotenv**: Carga variables de entorno desde un archivo `.env`.
 
 ### Desarrollo:
 
 - **nodemon**: Herramienta para reiniciar el servidor automáticamente durante el desarrollo.
-- **sequelize-cli**: CLI para manejar las migraciones y otros comandos de Sequelize.
 
 ## Instalación
 
-1. Clonar el repositorio:
+1. **Clonar el repositorio**:
 
    ```bash
-   git clone https://github.com/EP-2024C2/tp-ntom-aykema
-   cd tp-ntom-aykema
+    git clone https://github.com/EP-2024C2/tp-mongo-aykema.git
+    cd tp-mongo-aykema
     ```
 
 2. **Instalar las dependencias**:
@@ -48,21 +49,40 @@ Este proyecto consiste en un API REST construida con Node.js, Express y Sequeliz
    npm i
     ```
 
-### 3. Configurar la base de datos:
+3. **Configurar y ejecutar con Docker**:
 
-- Por defecto, el proyecto está configurado para utilizar PostgreSQL.
-- Se puede usar otra base de datos, solo hay que actualizar la configuración en el archivo `/models/index.js` y descomentar las líneas necesarias para sincronizar con la nueva base de datos.
-- **Nota**: Si usas `db.sequelize.sync({force: true})` de `/src/index.js` para crear las tablas, tener en cuenta que esto eliminará y recreará las tablas existentes.
+- Asegúrate de tener Docker y Docker Compose instalados en tu sistema.
 
-#### Usar PostgreSQL con Docker:
-
-1. **Levantar los servicios de Docker**:
-
-   Asegurarse de que Docker esté instalado y en ejecución en tu máquina. Despues, ejecutar el siguiente comando en la raíz del proyecto para levantar los servicios definidos en el archivo `docker-compose.yml`:
+- Construir y levantar los contenedores:
 
    ```bash
-   docker-compose up -d
+   docker compose up -d
+   ```
+    Esto iniciará:
+
+    - MongoDB en el puerto 27017
+    - Mongo Express (interfaz web) en el puerto 8081
+    - Redis en el puerto 6379
+    - RedisInsight (interfaz web) en el puerto 5540
+
+4. **Verificar que los contenedores estén corriendo**:
+
+   ```bash
+    docker ps
+   ```
+
+    Acceder a las interfaces web:
+
+    - Mongo Express: http://localhost:8081
+    - RedisInsight: http://localhost:5540
+
+    Para detener los contenedores:
+
+    ```bash
+    docker compose down
     ```
+
+Nota: Las credenciales y configuraciones se encuentran en el archivo `.env` y `docker-compose.yml`.
 
 ## Uso
 
@@ -81,7 +101,7 @@ Para iniciar la aplicación en producción, ejecuta:
 ```bash
 npm start
 ```
-La aplicación estará disponible en [http://localhost:3001](http://localhost:3001).
+La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
 ## Rutas
 
@@ -109,14 +129,17 @@ Las rutas definidas en la aplicación son:
 - `POST /productos`: Crea un nuevo producto.
 - `DELETE /productos/:id`: Elimina un producto por su ID.
 - `PUT /productos/:id`: Actualiza un producto por su ID.
-- `GET /productos/:id/componentes`: Obtiene los componentes asociados a un producto por su ID.
-- `GET /productos/:id/fabricantes`: Obtiene los fabricantes asociados a un producto por su ID.
-- `POST /productos/:id/componentes`: Agrega un componente a un producto por su ID.
-- `POST /productos/:id/fabricantes`: Agrega un fabricante a un producto por su ID.
 
-## Diagrama
+#### Componentes de Productos
+- `GET /productos/:id/componentes`: Obtiene los componentes de un producto.
+- `GET /productos/:id/componentes/:componenteId`: Obtiene un componente específico de un producto.
+- `POST /productos/:id/componentes`: Agrega un componente a un producto.
+- `PUT /productos/:id/componentes/:componenteId`: Actualiza un componente de un producto.
+- `DELETE /productos/:id/componentes/:componenteId`: Elimina un componente de un producto.
 
-![Diagrama](diagrama.png)
+#### Fabricantes de Productos
+- `GET /productos/:id/fabricantes`: Obtiene los fabricantes de un producto.
+- `POST /productos/:id/fabricantes`: Asocia un fabricante a un producto.
 
 ## Autores
 
