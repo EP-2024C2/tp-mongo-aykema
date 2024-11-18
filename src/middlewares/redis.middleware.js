@@ -1,7 +1,7 @@
 const redisClient = require('../db/redis')
 
 const checkCache = (collection) => (req, res, next) => {
-    const id = req.params.id ?? -1
+    const id = req.params.id ?? -1 // Usamos -1 para la lista completa
     const key = `${collection}:${id}`
     
     redisClient.get(key).then(data => {
@@ -31,7 +31,6 @@ const deleteCache = (collection) => (req, res, next) => {
     next()
 }
 
-// Middleware para guardar en cache
 const saveToCache = (data, key) => {
     redisClient.setEx(key, 3600, JSON.stringify(data))
 }

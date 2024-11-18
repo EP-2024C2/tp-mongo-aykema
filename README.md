@@ -78,7 +78,6 @@ Se utiliza **MongoDB** como base de datos principal y **Redis** como sistema de 
 
     - Mongo Express: http://localhost:8081
     - RedisInsight: http://localhost:5540
-    - App: http://localhost:3000
 
     Para detener los contenedores:
 

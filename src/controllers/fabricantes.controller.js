@@ -3,7 +3,7 @@ const { saveToCache } = require('../middlewares/redis.middleware')
 
 const getAllFabricantes = async (req, res) => {
     const fabricantes = await Fabricante.find()
-    saveToCache(fabricantes, 'fabricantes:-1')
+    saveToCache(fabricantes, 'fabricantes:-1') // Usamos -1 para la lista completa
     res.status(200).json(fabricantes)
 }
 
