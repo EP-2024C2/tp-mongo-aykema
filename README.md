@@ -119,20 +119,14 @@ La aplicación estará disponible en [http://localhost:3000](http://localhost:30
 
 Las rutas definidas en la aplicación son:
 
-### Componentes
-- `GET /componentes`: Obtiene todos los componentes.
-- `GET /componentes/:id`: Obtiene un componente por su ID.
-- `POST /componentes`: Crea un nuevo componente.
-- `DELETE /componentes/:id`: Elimina un componente por su ID.
-- `PUT /componentes/:id`: Actualiza un componente por su ID.
-- `GET /componentes/:id/productos`: Obtiene los productos asociados a un componente por su ID.
-
 ### Fabricantes
 - `GET /fabricantes`: Obtiene todos los fabricantes.
 - `GET /fabricantes/:id`: Obtiene un fabricante por su ID.
 - `POST /fabricantes`: Crea un nuevo fabricante.
 - `DELETE /fabricantes/:id`: Elimina un fabricante por su ID.
 - `PUT /fabricantes/:id`: Actualiza un fabricante por su ID.
+
+#### Fabricantes de Productos
 - `GET /fabricantes/:id/productos`: Obtiene los productos asociados a un fabricante por su ID.
 
 ### Productos
@@ -149,9 +143,9 @@ Las rutas definidas en la aplicación son:
 - `PUT /productos/:id/componentes/:componenteId`: Actualiza un componente de un producto.
 - `DELETE /productos/:id/componentes/:componenteId`: Elimina un componente de un producto.
 
-#### Fabricantes de Productos
+#### Productos de Fabricantes 
 - `GET /productos/:id/fabricantes`: Obtiene los fabricantes de un producto.
-- `POST /productos/:id/fabricantes`: Asocia un fabricante a un producto.
+- `POST /productos/:id/fabricantes`: Asocia o crea un fabricante a un producto.
 
 ## Autores
 
